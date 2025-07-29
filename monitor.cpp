@@ -5,7 +5,7 @@
 #include <iostream>
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 
-void blinkAlert(const string& message) {
+void blinkAlert(const std::string& message) {
     cout << message << "\n";
     for (int i = 0; i < 6; i++) {
         cout << "\r* " << flush;
