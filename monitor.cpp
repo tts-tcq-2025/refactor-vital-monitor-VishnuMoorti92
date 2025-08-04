@@ -5,7 +5,7 @@
 #include <iostream>
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 
-void dynamicUpdateandWarning(const std::string& message) {
+void dynamicUpdateandWarningandPrint(const std::string& message) {
     cout << message << "\n";
     for (int i = 0; i < 6; i++) {
         cout << "\r* " << flush;
@@ -15,20 +15,33 @@ void dynamicUpdateandWarning(const std::string& message) {
     }
 }
 
+bool vitalRangechekandAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std::string&)> prntWrng) {
+    if(vitaldetails.vitalType is not "Oxygen Saturation")
+    {
+        if (vitaldetails.value < vitaldetails.min || vitaldetails.value > vitaldetails.max) {
+            alert(vitaldetails.vitalType + " is out of range!");
+            return false;
+    }
+    else{
+        if (vitaldetails.value < vitaldetails.min) {
+            alert(vitaldetails.vitalType + " is out of range!");
+            return false;
+        }
+    }
+    return true;
+}
+
 int vitalsOk(float temperature, float pulseRate, float spo2) {
-    if (temperature > 102 || temperature < 95) {
-        dynamicUpdateandWarning("Temperature is critical!");
-        return 0;
+vitalInfoandRange vitaldetails[] = {
+        {"Temperature", temperature, 95.0, 102.0},
+        {"Pulse Rate", pulseRate, 60.0, 100.0},
+        {"Oxygen Saturation", spo2, 90.0, 89.0}
+    };
+
+    bool vitalsChkOk = true;
+    for (int i = 0; i < 3; ++i) {
+        vitalsChkOk = vitalRangechekandAlertmsg(vitals[i], alert);
     }
 
-    if (pulseRate < 60 || pulseRate > 100) {
-        dynamicUpdateandWarning("Pulse Rate is out of range!");
-        return 0;
-    }
-
-    if (spo2 < 90) {
-        dynamicUpdateandWarning("Oxygen Saturation out of range!");
-        return 0;
-    }
-    return 1;
+    return vitalsChkOk;
 }
