@@ -17,7 +17,7 @@ void dynamicUpdateandWarningandPrint(const std::string& message) {
 
 bool vitalRangechek(vitalInfoandRange& vitaldetails) {
     if(vitaldetails.vitalType != "Oxygen Saturation") {
-        return((vitaldetails.value < vitaldetails.min);
+        return(vitaldetails.value < vitaldetails.min);
     }
     return(vitaldetails.value < vitaldetails.min || vitaldetails.value > vitaldetails.max);
 }
@@ -29,8 +29,12 @@ bool vitalRangeAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std:
         return false;
     }
     return true;
-
 }
+
+void printalertmassage(std::string& lineContent){
+  std::cout<<lineContent;
+}
+
 int vitalsOk(float temperature, float pulseRate, float spo2) {
 vitalInfoandRange vitaldetails[] = {{"Temperature", temperature, 95.0, 102.0},
                                     {"Pulse Rate", pulseRate, 60.0, 100.0},
