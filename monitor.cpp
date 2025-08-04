@@ -16,11 +16,11 @@ void dynamicUpdateandWarningandPrint(const std::string& message) {
 }
 
 bool vitalRangechekandAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std::string&)> prntWrng) {
-    if(vitaldetails.vitalType is not "Oxygen Saturation")
-    {
+    if(vitaldetails.vitalType != "Oxygen Saturation") {
         if (vitaldetails.value < vitaldetails.min || vitaldetails.value > vitaldetails.max) {
             alert(vitaldetails.vitalType + " is out of range!");
             return false;
+        }
     }
     else{
         if (vitaldetails.value < vitaldetails.min) {
