@@ -35,7 +35,7 @@ void printalertmassage(std::string& lineContent){
   std::cout<<lineContent;
 }
 
-int vitalsOk(float temperature, float pulseRate, float spo2) {
+int vitalsOk(float temperature, float pulseRate, float spo2, std::function<void(std::string&)> prntWrng) {
 vitalInfoandRange vitaldetails[] = {{"Temperature", temperature, 95.0, 102.0},
                                     {"Pulse Rate", pulseRate, 60.0, 100.0},
                                     {"Oxygen Saturation", spo2, 90.0, 89.0}};
