@@ -15,33 +15,31 @@ void dynamicUpdateandWarningandPrint(const std::string& message) {
     }
 }
 
-bool vitalRangechekandAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std::string&)> prntWrng) {
+bool vitalRangechek(vitalInfoandRange& vitaldetails) {
     if(vitaldetails.vitalType != "Oxygen Saturation") {
-        if (vitaldetails.value < vitaldetails.min || vitaldetails.value > vitaldetails.max) {
-            prntWrng(vitaldetails.vitalType + " is out of range!");
-            return false;
-        }
+        return((vitaldetails.value < vitaldetails.min);
     }
-    else{
-        if (vitaldetails.value < vitaldetails.min) {
-            prntWrng(vitaldetails.vitalType + " is out of range!");
-            return false;
-        }
-    }
-    return true;
+    return(vitaldetails.value < vitaldetails.min || vitaldetails.value > vitaldetails.max);
 }
 
+bool vitalRangeAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std::string&)> prntWrng){
+    if(vitalRangechek(vitaldetails)){
+        std::string msg = vitaldetails.vitalType + " is out of range!";
+        prntWrng(msg);
+        return false;
+    }
+    return true;
+
+}
 int vitalsOk(float temperature, float pulseRate, float spo2) {
-vitalInfoandRange vitaldetails[] = {
-        {"Temperature", temperature, 95.0, 102.0},
-        {"Pulse Rate", pulseRate, 60.0, 100.0},
-        {"Oxygen Saturation", spo2, 90.0, 89.0}
-    };
+vitalInfoandRange vitaldetails[] = {{"Temperature", temperature, 95.0, 102.0},
+                                    {"Pulse Rate", pulseRate, 60.0, 100.0},
+                                    {"Oxygen Saturation", spo2, 90.0, 89.0}};
 
     bool vitalsChkOk = true;
     for (int i = 0; i < 3; ++i) {
-        vitalsChkOk = vitalRangechekandAlertmsg(vitaldetails[i], prntWrng);
-    }
-
+        if(!vitalRangechekandAlertmsg(vitaldetails[i], prntWrng)){
+            vitalsChkOk = false;
+        }
     return vitalsChkOk;
 }
