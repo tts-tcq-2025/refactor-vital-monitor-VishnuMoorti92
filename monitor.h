@@ -9,6 +9,8 @@ struct vitalInfoandRange {
     float max;
 };
 
-bool vitalRangechekandAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std::string&)> prntWrng);
+bool vitalRangechek(vitalInfoandRange& vitaldetails);
+bool vitalRangeAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std::string&)> prntWrng);
 
 int vitalsOk(float temperature, float pulseRate, float spo2);
+
