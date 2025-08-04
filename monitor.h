@@ -12,5 +12,6 @@ struct vitalInfoandRange {
 bool vitalRangechek(vitalInfoandRange& vitaldetails);
 bool vitalRangeAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std::string&)> prntWrng);
 
-int vitalsOk(float temperature, float pulseRate, float spo2);
+int vitalsOk(float temperature, float pulseRate, float spo2, std::function<void(std::string&)> prntWrng);
+
 
