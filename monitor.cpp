@@ -16,7 +16,10 @@ void dynamicUpdateandWarningandPrint(const std::string& message) {
 }
 
 bool vitalRangechek(vitalInfoandRange& vitaldetails) {
-    return(vitaldetails.value < vitaldetails.min || vitaldetails.value > vitaldetails.max);
+    if(vitaldetails.vitalType != "Oxygen Saturation"){
+        return(vitaldetails.value < vitaldetails.min || vitaldetails.value > vitaldetails.max);
+    }
+    return(vitaldetails.value < vitaldetails.min);
 }
 
 bool vitalRangeAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std::string&)> prntWrng){
