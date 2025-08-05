@@ -45,5 +45,6 @@ vitalInfoandRange vitaldetails[] = {{"Temperature", temperature, 95.0, 102.0},
         if(!vitalRangeAlertmsg(vitaldetails[i], prntWrng)){
             vitalsChkOk = false;
         }
-    return vitalsChkOk;}
+    return vitalsChkOk;
+    }
 }
