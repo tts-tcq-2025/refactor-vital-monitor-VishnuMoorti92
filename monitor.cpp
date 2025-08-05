@@ -40,7 +40,7 @@ vitalInfoandRange vitaldetails[] = {{"Temperature", temperature, 95.0, 102.0},
     bool vitalsChkOk = true;
     for (int i = 0; i < 3; ++i) {
         if(!vitalRangeAlertmsg(vitaldetails[i], prntWrng)){
-            vitalsChkOk = false && vitalsChkOk;
+            vitalsChkOk = false;
         }
     return vitalsChkOk;
     }
