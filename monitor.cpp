@@ -34,13 +34,14 @@ vitalInfoandRange vitaldetails[] = {{"Temperature", temperature, 95.0, 102.0},
                                     {"Pulse Rate", pulseRate, 60.0, 100.0},
                                     {"Oxygen Saturation", spo2, 90.0, 90.0}};
 
-    bool vitalsChkNOk = true;
-    bool vitalmsgdisp = true;
+
+    bool allVitalsOk = true;
     for (int i = 0; i < 3; ++i) {
-        vitalsChkNOk = !vitalRangechek(vitaldetails[i]);
-        if(!vitalsChkNOk){
-            vitalmsgdisp = vitalRangeAlertmsg(vitaldetails[i], prntWrng);
+        bool isVitalOk = !vitalRangechek(vitaldetails[i]);
+        allVitalsOk = allVitalsOk && isVitalOk;
+        if (!isVitalOk) {
+            vitalRangeAlertmsg(vitaldetails[i], prntWrng);
         }
     }
-    return (vitalsChkNOk);
+    return allVitalsOk;
 }
