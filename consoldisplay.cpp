@@ -1,4 +1,5 @@
+#include "consoldisplay.hpp"
 
-void printalertmassage(std::string& lineContent){
-  std::cout<<lineContent;
+void printAlertMessage(std::string& lineContent) {
+    std::cout << lineContent;
 }
