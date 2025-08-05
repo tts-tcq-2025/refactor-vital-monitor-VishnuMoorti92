@@ -2,7 +2,6 @@
 #include <string>
 #include <functional>
 
-// Class definition replacing the struct
 class VitalInfoAndRange {
 private:
     std::string vitalType;
@@ -28,3 +27,4 @@ public:
 bool vitalRangeCheck(VitalInfoAndRange& vitalDetails);
 bool vitalRangeAlertMsg(VitalInfoAndRange& vitalDetails, std::function<void(std::string&)> prntWrng);
 int vitalsOk(float temperature, float pulseRate, float spo2, std::function<void(std::string&)> prntWrng);
+
