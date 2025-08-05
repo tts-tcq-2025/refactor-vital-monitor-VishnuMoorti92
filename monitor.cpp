@@ -1,4 +1,5 @@
 #include "monitor.h"
+#include "consoldisplay.hpp"
 #include <assert.h>
 #include <thread>
 #include <chrono>
@@ -26,10 +27,6 @@ bool vitalRangeAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std:
     std::string msg = vitaldetails.vitalType + " is out of range!";
     prntWrng(msg);
     return false;
-}
-
-void printalertmassage(std::string& lineContent){
-  std::cout<<lineContent;
 }
 
 int vitalsOk(float temperature, float pulseRate, float spo2, std::function<void(std::string&)> prntWrng) {
