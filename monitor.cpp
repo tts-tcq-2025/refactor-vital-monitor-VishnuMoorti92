@@ -23,12 +23,9 @@ bool vitalRangechek(vitalInfoandRange& vitaldetails) {
 }
 
 bool vitalRangeAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std::string&)> prntWrng){
-    if(vitalRangechek(vitaldetails)){
-        std::string msg = vitaldetails.vitalType + " is out of range!";
-        prntWrng(msg);
-        return false;
-    }
-    return true;
+    std::string msg = vitaldetails.vitalType + " is out of range!";
+    prntWrng(msg);
+    return false;
 }
 
 void printalertmassage(std::string& lineContent){
@@ -40,11 +37,13 @@ vitalInfoandRange vitaldetails[] = {{"Temperature", temperature, 95.0, 102.0},
                                     {"Pulse Rate", pulseRate, 60.0, 100.0},
                                     {"Oxygen Saturation", spo2, 90.0, 90.0}};
 
-    bool vitalsChkOk = true;
+    bool vitalsChkNOk = true;
+    bool vitalmsgdisp = true;
     for (int i = 0; i < 3; ++i) {
-        if(!vitalRangeAlertmsg(vitaldetails[i], prntWrng)){
-            vitalsChkOk = false;
+        vitalsChkNOk = vitalRangechek(vitaldetails[i]);
+        if(vitalsChkNOk){
+            vitalmsgdisp = vitalRangeAlertmsg(vitaldetails[i], prntWrng);
         }
     }
-    return vitalsChkOk;
+    return vitalsChkNOk;
 }
