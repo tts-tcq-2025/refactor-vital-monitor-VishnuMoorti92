@@ -1,38 +1,47 @@
-#include "./monitor.h"
+#include "monitor.h"
+#include "consoldisplay.hpp"
 #include <assert.h>
 #include <thread>
 #include <chrono>
 #include <iostream>
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 
-int vitalsOk(float temperature, float pulseRate, float spo2) {
-  if (temperature > 102 || temperature < 95) {
-    cout << "Temperature is critical!\n";
+void dynamicUpdateandWarningandPrint(const std::string& message) {
+    cout << message << "\n";
     for (int i = 0; i < 6; i++) {
-      cout << "\r* " << flush;
-      sleep_for(seconds(1));
-      cout << "\r *" << flush;
-      sleep_for(seconds(1));
+        cout << "\r* " << flush;
+        sleep_for(seconds(1));
+        cout << "\r *" << flush;
+        sleep_for(seconds(1));
     }
-    return 0;
-  } else if (pulseRate < 60 || pulseRate > 100) {
-    cout << "Pulse Rate is out of range!\n";
-    for (int i = 0; i < 6; i++) {
-      cout << "\r* " << flush;
-      sleep_for(seconds(1));
-      cout << "\r *" << flush;
-      sleep_for(seconds(1));
+}
+
+bool vitalRangechek(vitalInfoandRange& vitaldetails) {
+    if(vitaldetails.vitalType != "Oxygen Saturation"){
+        return(vitaldetails.value < vitaldetails.min || vitaldetails.value > vitaldetails.max);
     }
-    return 0;
-  } else if (spo2 < 90) {
-    cout << "Oxygen Saturation out of range!\n";
-    for (int i = 0; i < 6; i++) {
-      cout << "\r* " << flush;
-      sleep_for(seconds(1));
-      cout << "\r *" << flush;
-      sleep_for(seconds(1));
+    return(vitaldetails.value < vitaldetails.min);
+}
+
+bool vitalRangeAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std::string&)> prntWrng){
+    std::string msg = vitaldetails.vitalType + " is out of range!";
+    prntWrng(msg);
+    return false;
+}
+
+int vitalsOk(float temperature, float pulseRate, float spo2, std::function<void(std::string&)> prntWrng) {
+vitalInfoandRange vitaldetails[] = {{"Temperature", temperature, 95.0, 102.0},
+                                    {"Pulse Rate", pulseRate, 60.0, 100.0},
+                                    {"Oxygen Saturation", spo2, 90.0, 90.0}};
+
+
+    bool allVitalsOk = true;
+    for (int i = 0; i < 3; ++i) {
+        bool isVitalOk = !vitalRangechek(vitaldetails[i]);
+        allVitalsOk = allVitalsOk && isVitalOk;
+        if (!isVitalOk) {
+            vitalRangeAlertmsg(vitaldetails[i], prntWrng);
+        }
     }
-    return 0;
-  }
-  return 1;
+    return allVitalsOk;
 }
