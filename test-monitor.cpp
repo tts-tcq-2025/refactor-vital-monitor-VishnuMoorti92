@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <vector>
 #include <string>
-#include "monitor.hpp"
+#include "monitor.h"
 
 std::vector<std::string> messages;
 auto alertfunc = [&messages](const std::string& msg) {
@@ -16,6 +16,7 @@ TEST(Monitor, NotOkWhenAnyVitalIsOffRange) {
   ASSERT_FALSE(vitalsOk(100, 101, 95, alertfunc));
   ASSERT_FALSE(vitalsOk(100, 75, 89.9, alertfunc));
 }
+
 
 
 
