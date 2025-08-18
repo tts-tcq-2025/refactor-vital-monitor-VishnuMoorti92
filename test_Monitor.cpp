@@ -4,6 +4,11 @@
 #include "monitor.h"
 #include "test_Monitor.hpp"
 
+std::vector<std::string> messages;
+auto alertfunc = & {
+    messages.push_back(msg);
+};
+
 TEST(Monitor, NotOkWhenAnyVitalIsOffRange) {
     messages.clear();
     ASSERT_FALSE(vitalsOk(94, 80, 95, alertfunc));
@@ -42,6 +47,7 @@ TEST(Monitor, NoWarningOrAlertWhenVitalsAreMidRange) {
     ASSERT_TRUE(vitalsOk(98.6, 75, 96, alertfunc));
     ASSERT_TRUE(messages.empty());
 }
+
 
 
 
