@@ -3,9 +3,6 @@
 #include <string>
 #include <functional>
 
-extern std::vector<std::string> messages;
-extern std::function<void(const std::string&)> alertfunc;
-
 namespace EarlyWarning {
     bool isInWarningRange(const vitalInfoandRange& vital, std::string& warningMsg) {
         // Simulate warning if value is within 1 unit of min or max
