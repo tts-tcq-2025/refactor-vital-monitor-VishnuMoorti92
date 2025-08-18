@@ -27,7 +27,7 @@ TEST(Monitor, NotOkWhenAnyVitalIsOffRange) {
 
 
 TEST(Monitor, WarningGeneratedNearLowerThreshold) {
-    resetMessages();
+    messages.clear();
     ASSERT_TRUE(vitalsOk(95.1, 60.1, 90.1, alertfunc));
     ASSERT_NE(std::find_if(messages.begin(), messages.end(),
          {
@@ -49,6 +49,7 @@ TEST(Monitor, NoWarningOrAlertWhenVitalsAreMidRange) {
     ASSERT_TRUE(vitalsOk(98.6, 75, 96, alertfunc));
     ASSERT_TRUE(messages.empty());
 }
+
 
 
 
