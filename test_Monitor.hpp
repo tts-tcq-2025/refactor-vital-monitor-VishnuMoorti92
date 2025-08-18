@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <vector>
 #include <string>
+#include <functional>
 
 extern std::vector<std::string> messages;
 extern std::function<void(const std::string&)> alertfunc;
