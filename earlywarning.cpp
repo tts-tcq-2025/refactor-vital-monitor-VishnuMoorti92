@@ -5,36 +5,23 @@ namespace {
         return 0.015f * vital.max;
     }
 
-    bool isApproachingLowerBound(const vitalInfoandRange& vital, float tolerance) {
-        return vital.value >= vital.min && vital.value < vital.min + tolerance;
-    }
-
-    bool isApproachingUpperBound(const vitalInfoandRange& vital, float tolerance) {
-        return vital.value <= vital.max && vital.value > vital.max - tolerance;
+    std::string getWarningMessage(const std::string& type, bool lowerBound) {
+        if (type == "Oxygen Saturation") return "Warning: Approaching hypoxia";
+        return lowerBound ? "Warning: Approaching hypothermia" : "Warning: Approaching hyperthermia";
     }
 }
 
 bool EarlyWarning::isInWarningRange(const vitalInfoandRange& vital, std::string& warningMsg) {
-    float tolerance = calculateTolerance(vital);
+    const float tolerance = calculateTolerance(vital);
+    const bool lowerBound = vital.value >= vital.min && vital.value < vital.min + tolerance;
+    const bool upperBound = vital.value <= vital.max && vital.value > vital.max - tolerance;
 
-    if (vital.vitalType == "Oxygen Saturation") {
-        if (isApproachingLowerBound(vital, tolerance)) {
-            warningMsg = "Warning: Approaching hypoxia";
-            return true;
-        }
-        return false;
-    }
-
-    if (isApproachingLowerBound(vital, tolerance)) {
-        warningMsg = "Warning: Approaching hypothermia";
-        return true;
-    }
-
-    if (isApproachingUpperBound(vital, tolerance)) {
-        warningMsg = "Warning: Approaching hyperthermia";
+    if (lowerBound || (vital.vitalType != "Oxygen Saturation" && upperBound)) {
+        warningMsg = getWarningMessage(vital.vitalType, lowerBound);
         return true;
     }
 
     return false;
 }
+
 
