@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "monitor.h"
+#include "test_Monitor.hpp"
 
 TEST(Monitor, NotOkWhenAnyVitalIsOffRange) {
     messages.clear();
@@ -41,6 +42,7 @@ TEST(Monitor, NoWarningOrAlertWhenVitalsAreMidRange) {
     ASSERT_TRUE(vitalsOk(98.6, 75, 96, alertfunc));
     ASSERT_TRUE(messages.empty());
 }
+
 
 
 
