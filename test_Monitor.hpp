@@ -2,10 +2,8 @@
 #include <vector>
 #include <string>
 
-std::vector<std::string> messages;
-auto alertfunc = & {
-    messages.push_back(msg);
-};
+extern std::vector<std::string> messages;
+extern std::function<void(const std::string&)> alertfunc;
 
 namespace EarlyWarning {
     bool isInWarningRange(const vitalInfoandRange& vital, std::string& warningMsg) {
