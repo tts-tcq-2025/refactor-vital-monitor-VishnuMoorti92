@@ -6,9 +6,8 @@
 #include "test_Monitor.hpp"
 
 std::vector<std::string> messages;
-
-std::function<void(const std::string&)> alertfunc =  {
-    messages.push_back(msg);
+auto captureAlert = [&messages](const std::string& msg) {
+        messages.push_back(msg);
 };
 
 TEST(Monitor, NotOkWhenAnyVitalIsOffRange) {
@@ -50,6 +49,7 @@ TEST(Monitor, NoWarningOrAlertWhenVitalsAreMidRange) {
     ASSERT_TRUE(vitalsOk(98.6, 75, 96, alertfunc));
     ASSERT_TRUE(messages.empty());
 }
+
 
 
 
