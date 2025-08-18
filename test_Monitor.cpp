@@ -7,7 +7,7 @@
 
 std::vector<std::string> messages;
 
-std::function<void(const std::string& msg)> alertfunc =  {
+std::function<void(const std::string&)> alertfunc =  {
     messages.push_back(msg);
 };
 
@@ -50,6 +50,7 @@ TEST(Monitor, NoWarningOrAlertWhenVitalsAreMidRange) {
     ASSERT_TRUE(vitalsOk(98.6, 75, 96, alertfunc));
     ASSERT_TRUE(messages.empty());
 }
+
 
 
 
