@@ -1,5 +1,17 @@
 #include "earlywarning.hpp"
 
+void PrintAlertMessage(const std::string& message) {
+    cout << message << "\n";
+    for (int i = 0; i < 6; ++i) {
+        cout << "\r* " << flush;
+        sleep_for(seconds(1));
+        cout << "\r *" << flush;
+        sleep_for(seconds(1));
+    }
+}
+
+bool checkVital(const VitalCheck& vital, std::function<void(const std::string&)> alert);
+
 bool isVitalOutOfRange(const vitalInfoandRange& vital) {
     return vital.value < vital.min || vital.value > vital.max;
 }
