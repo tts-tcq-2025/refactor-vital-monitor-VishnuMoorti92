@@ -4,13 +4,6 @@
 
 namespace {
 
-// Define condition types
-enum class VitalCondition {
-    NORMAL,
-    NEAR_LOWER,
-    NEAR_UPPER
-};
-
 // Map condition to warning message
 std::string conditionToMessage(const std::string& type, VitalCondition condition) {
     if (type == "Oxygen Saturation") {
