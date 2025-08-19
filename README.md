@@ -54,5 +54,4 @@ handleVitalStatus() checks EarlyWarning
 
 # challenge
    - cyclomatric complexity yet to be worked.
-   - test code need to be adapted.
    - modularity need to be improved.
