@@ -41,8 +41,16 @@ Can we add future functionality without disturbing existing features? Can we do 
 ## Keep it simple and testable
 
 Shorten the Semantic distance
-
 - Procedural to express sequence
 - Functional to express relation between input and output
 - Object oriented to encapsulate state with actions
 - Aspect oriented to capture repeating aspects
+
+===================================================================================================
+# Implemented Extension 1:
+Added new early_warning.cpp where tolarance is calculated
+
+# challenge
+   - cyclomatric complexity yet to be worked.
+   - test code need to be adapted.
+   - modularity need to be improved.
