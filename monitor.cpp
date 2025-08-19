@@ -10,8 +10,6 @@ void PrintAlertMessage(const std::string& message) {
     }
 }
 
-bool checkVital(const VitalCheck& vital, std::function<void(const std::string&)> alert);
-
 bool isVitalOutOfRange(const vitalInfoandRange& vital) {
     return vital.value < vital.min || vital.value > vital.max;
 }
