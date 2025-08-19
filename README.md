@@ -49,6 +49,8 @@ Shorten the Semantic distance
 ===================================================================================================
 # Implemented Extension 1:
 Added new early_warning.cpp where tolarance is calculated
+vitalsOk() calls handleVitalStatus().
+handleVitalStatus() checks EarlyWarning
 
 # challenge
    - cyclomatric complexity yet to be worked.
