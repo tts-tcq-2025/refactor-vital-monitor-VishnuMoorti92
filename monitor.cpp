@@ -24,7 +24,7 @@ int vitalsOk(float temperature, float pulseRate, float spo2, std::function<void(
         {"Oxygen Saturation", spo2, 90.0, 100.0}
     };
 
-    bool allVitalsOk = true;
+    bool allVitalsOk = false;
     for (const auto& vital : vitals) {
         handleVitalStatus(vital, prntWrng, allVitalsOk);
     }
