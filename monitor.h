@@ -1,15 +1,25 @@
 #pragma once
-#include <string>
-#include <functional>
 
-struct vitalInfoandRange {
-    std::string vitalType;
-    float value;
-    float min;
-    float max;
+enum Vital {
+    VitalTemperature,
+    VitalPulse,
+    VitalSpo2,
+    VitalCount
 };
 
-bool vitalRangechek(vitalInfoandRange& vitaldetails);
-bool vitalRangeAlertmsg(vitalInfoandRange& vitaldetails, std::function<void(std::string&)> prntWrng);
+enum Language {
+    LANG_ENGLISH,
+    LANG_GERMAN,
+    LANG_COUNT
+};
 
-int vitalsOk(float temperature, float pulseRate, float spo2, std::function<void(std::string&)> prntWrng);
+typedef struct {
+    enum Vital status;
+    const char* alertMessages[LANG_COUNT];
+} VitalInfo;
+
+extern Language currentLanguage;
+
+const char* getAlertMessage(int CurrVital);
+
+int vitalsOk(float temperature, float pulseRate, float spo2);
