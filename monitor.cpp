@@ -1,43 +1,68 @@
-#include "earlywarning.hpp"
+#include "./monitor.h"
+#include <assert.h>
+#include <thread>
+#include <chrono>
+#include <iostream>
+#include <cstdio>
 
-void PrintAlertMessage(const std::string& message) {
-    cout << message << "\n";
-    for (int i = 0; i < 6; ++i) {
-        cout << "\r* " << flush;
-        sleep_for(seconds(1));
-        cout << "\r *" << flush;
-        sleep_for(seconds(1));
-    }
+#include "./showAlert.h"
+
+using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
+
+Language currentLanguage = LANG_GERMAN;  // Default language
+
+// Mapping table - Language order should be same as enum Language order
+const VitalInfo vitalInfoTable[VitalCount] = {
+    {VitalTemperature, {
+        "Temperature is critical!\n",
+        "Temperatur ist kritisch!\n"
+    }},
+    {VitalPulse, {
+        "Pulse Rate is out of range!\n",
+        "Puls ist außerhalb des Bereichs!\n"
+    }},
+    {VitalSpo2, {
+        "Oxygen Saturation out of range!\n",
+        "Sauerstoffsättigung außerhalb des Bereichs!\n"
+    }}
+};
+
+typedef bool (*VitalCheckFunction)(float);
+
+bool isTemperatureCritical(float temperature) {
+    return (temperature > 102 || temperature < 95);
 }
 
-bool isVitalOutOfRange(const vitalInfoandRange& vital) {
-    return vital.value < vital.min || vital.value > vital.max;
+bool isPulseOutOfRange(float pulseRate) {
+    return (pulseRate < 60 || pulseRate > 100);
 }
 
-void handleVitalStatus(const vitalInfoandRange& vital, std::function<void(std::string&)> prntWrng, bool& allOk) {
-    std::string warningMsg;
-    if (EarlyWarning::isInWarningRange(vital, warningMsg)) {
-        prntWrng(warningMsg);
-    }
-
-    if (isVitalOutOfRange(vital)) {
-        std::string alert = vital.vitalType + " is out of range!";
-        prntWrng(alert);
-        allOk = false;
-    }
+bool isSpo2Low(float spo2) {
+    return (spo2 < 90);
 }
 
-int vitalsOk(float temperature, float pulseRate, float spo2, std::function<void(std::string&)> prntWrng) {
-    vitalInfoandRange vitals[] = {
-        {"Temperature", temperature, 95.0, 102.0},
-        {"Pulse Rate", pulseRate, 60.0, 100.0},
-        {"Oxygen Saturation", spo2, 90.0, 100.0}
-    };
+// Function pointer array
+VitalCheckFunction vitalChecks[] = {
+    isTemperatureCritical,
+    isPulseOutOfRange,
+    isSpo2Low
+};
 
-    bool allVitalsOk = false;
-    for (const auto& vital : vitals) {
-        handleVitalStatus(vital, prntWrng, allVitalsOk);
+const char* getAlertMessage(int CurrVital) {
+    return vitalInfoTable[CurrVital].alertMessages[currentLanguage];
+}
+
+int vitalsOk(float temperature, float pulseRate, float spo2) {
+    float values[] = {temperature, pulseRate, spo2};
+    bool allOk = true;
+
+    for (int i = VitalTemperature; i < VitalCount; i++) {
+        if (vitalChecks[i](values[i])) {
+            const char* message = getAlertMessage(i);
+            showAlert(message);
+            allOk = false;
+        }
     }
-    return allVitalsOk;
+    return allOk ? 1 : 0;
 }
 
