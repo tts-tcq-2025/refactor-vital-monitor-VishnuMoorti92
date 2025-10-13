@@ -1,4 +1,3 @@
-
 #include "earlywarning.hpp"
 #include <vector>
 #include <string>
@@ -6,44 +5,40 @@
 
 namespace {
 
-// Map condition to warning message
-std::string conditionToMessage(const std::string& type, VitalCondition condition) {
-    static const std::unordered_map<std::string, std::unordered_map<VitalCondition, std::string>> messages = {
-        {"Oxygen Saturation", {
-            {VitalCondition::NEAR_LOWER, "Warning: Approaching hypoxia"}
-        }},
-        {"Temperature", {
-            {VitalCondition::NEAR_LOWER, "Warning: Approaching hypothermia"},
-            {VitalCondition::NEAR_UPPER, "Warning: Approaching hyperthermia"}
-        }}
-    };
+// Lookup table for warning messages
+const std::unordered_map<std::string, std::unordered_map<VitalCondition, std::string>> warningMessages = {
+    {"Oxygen Saturation", {
+        {VitalCondition::NEAR_LOWER, "Warning: Approaching hypoxia"}
+    }},
+    {"Temperature", {
+        {VitalCondition::NEAR_LOWER, "Warning: Approaching hypothermia"},
+        {VitalCondition::NEAR_UPPER, "Warning: Approaching hyperthermia"}
+    }}
+};
 
-    auto typeIt = messages.find(type == "Oxygen Saturation" ? "Oxygen Saturation" : "Temperature");
-    if (typeIt != messages.end()) {
-        auto condIt = typeIt->second.find(condition);
-        if (condIt != typeIt->second.end()) {
-            return condIt->second;
-        }
-    }
-    return "";
+// Lookup message based on type and condition
+std::string conditionToMessage(const std::string& type, VitalCondition condition) {
+    auto typeKey = (type == "Oxygen Saturation") ? "Oxygen Saturation" : "Temperature";
+    auto typeIt = warningMessages.find(typeKey);
+    auto condIt = (typeIt != warningMessages.end()) ? typeIt->second.find(condition) : warningMessages.at("Temperature").end();
+    return (condIt != typeIt->second.end()) ? condIt->second : "";
 }
 
-// Calculate tolerance based on max value
-float calculateTolerance(const vitalInfoandRange& vital) {
-    return 0.015f * vital.max;
+// Calculate tolerance
+float calculateTolerance(float max) {
+    return 0.015f * max;
 }
 
 // Map value to condition
 VitalCondition mapToCondition(const vitalInfoandRange& vital) {
-    float tolerance = calculateTolerance(vital);
-    if (vital.value >= vital.min && vital.value < vital.min + tolerance)
-        return VitalCondition::NEAR_LOWER;
+    float tolerance = calculateTolerance(vital.max);
+    bool nearLower = vital.value >= vital.min && vital.value < vital.min + tolerance;
+    bool nearUpper = vital.vitalType != "Oxygen Saturation" &&
+                     vital.value <= vital.max && vital.value > vital.max - tolerance;
 
-    if (vital.vitalType != "Oxygen Saturation" &&
-        vital.value <= vital.max && vital.value > vital.max - tolerance)
-        return VitalCondition::NEAR_UPPER;
-
-    return VitalCondition::NORMAL;
+    return nearLower ? VitalCondition::NEAR_LOWER :
+           nearUpper ? VitalCondition::NEAR_UPPER :
+           VitalCondition::NORMAL;
 }
 
 } // anonymous namespace
