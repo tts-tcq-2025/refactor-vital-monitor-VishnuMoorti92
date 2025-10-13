@@ -1,19 +1,29 @@
+
 #include "earlywarning.hpp"
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 namespace {
 
 // Map condition to warning message
 std::string conditionToMessage(const std::string& type, VitalCondition condition) {
-    if (type == "Oxygen Saturation") {
-        if (condition == VitalCondition::NEAR_LOWER)
-            return "Warning: Approaching hypoxia";
-    } else {
-        if (condition == VitalCondition::NEAR_LOWER)
-            return "Warning: Approaching hypothermia";
-        if (condition == VitalCondition::NEAR_UPPER)
-            return "Warning: Approaching hyperthermia";
+    static const std::unordered_map<std::string, std::unordered_map<VitalCondition, std::string>> messages = {
+        {"Oxygen Saturation", {
+            {VitalCondition::NEAR_LOWER, "Warning: Approaching hypoxia"}
+        }},
+        {"Temperature", {
+            {VitalCondition::NEAR_LOWER, "Warning: Approaching hypothermia"},
+            {VitalCondition::NEAR_UPPER, "Warning: Approaching hyperthermia"}
+        }}
+    };
+
+    auto typeIt = messages.find(type == "Oxygen Saturation" ? "Oxygen Saturation" : "Temperature");
+    if (typeIt != messages.end()) {
+        auto condIt = typeIt->second.find(condition);
+        if (condIt != typeIt->second.end()) {
+            return condIt->second;
+        }
     }
     return "";
 }
@@ -26,7 +36,6 @@ float calculateTolerance(const vitalInfoandRange& vital) {
 // Map value to condition
 VitalCondition mapToCondition(const vitalInfoandRange& vital) {
     float tolerance = calculateTolerance(vital);
-
     if (vital.value >= vital.min && vital.value < vital.min + tolerance)
         return VitalCondition::NEAR_LOWER;
 
